@@ -17,8 +17,8 @@ import org.apache.accumulo.core.data.Key;
 public class Generate {
   public static void main(String[] args) throws Exception {
 
-    if(args.length != 6) {
-      System.err.println("Usage : Generate <prefix> <numTablets> <numFiles> <numEntries> <numThreads> <dir>");
+    if(args.length != 5) {
+      System.err.println("Usage : Generate <prefix> <numTablets> <numFiles> <numEntries> <dir>");
       System.exit(2);
     }
 
@@ -26,14 +26,13 @@ public class Generate {
     int numTablets = Integer.parseInt(args[1]);
     int numFiles = Integer.parseInt(args[2]);
     int numEntries = Integer.parseInt(args[3]);
-    int numThreads  = Integer.parseInt(args[4]);
-    String dir = args[5];
+    String dir = args[4];
 
     long increment = Long.MAX_VALUE / numTablets;
 
     Random rand = new Random();
 
-    ExecutorService es = Executors.newFixedThreadPool(numThreads);
+    ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
 
     List<Future<?>> futures = new ArrayList<>();
 
