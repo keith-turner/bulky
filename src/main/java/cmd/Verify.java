@@ -103,6 +103,8 @@ public class Verify {
       });
     }
 
+    es.shutdown();
+
     prefixes.forEach((p,pi) -> System.out.printf("%s %s\n", p, pi));
   }
 

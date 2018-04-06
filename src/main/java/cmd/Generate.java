@@ -32,7 +32,7 @@ public class Generate {
 
     Random rand = new Random();
 
-    ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
+    ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 
     List<Future<?>> futures = new ArrayList<>();
 
