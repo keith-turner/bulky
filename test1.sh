@@ -3,6 +3,14 @@
 BULK_API=new
 
 hadoop fs -rm -R /bulk0*
+
+if [ "$BULK_API" == "old" ]; then
+  hadoop fs -mkdir /bulk01-fail
+  hadoop fs -mkdir /bulk02-fail
+  hadoop fs -mkdir /bulk03-fail
+  hadoop fs -mkdir /bulk04-fail
+fi
+
 accumulo shell -u root -p secret -e 'deletetable -f bulky'
 mvn package
 ./bin/run.sh cmd.Generate IA 100 10000 1000000 /bulk01
