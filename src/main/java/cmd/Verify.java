@@ -40,22 +40,16 @@ class PrefixInfo {
   @Override
   public String toString() {
 
-    int missing = 0;
-
-    Iterator<Long> iter1 = seen.iterator();
-    Iterator<Long> iter2 = seen.iterator();
-
-    if(iter2.hasNext()) {
-      iter2.next();
+    long missing = 0;
+    long min = 0;
+    long max = 0;
+    if(seen.size() > 0) {
+      min = seen.first();
+      max = seen.last();
+      missing = seen.size() - (max - min + 1);
     }
 
-    while(iter2.hasNext()) {
-      Long prev = iter1.next();
-      Long curr = iter2.next();
-      missing += curr-prev-1;
-    }
-
-    return String.format("min:%d max:%d dupes:%d missing:%d", seen.first(), seen.last(), dupes, missing);
+    return String.format("size:%d min:%d max:%d dupes:%d missing:%d",seen.size(), min, max, dupes, missing);
   }
 
   static PrefixInfo merge(PrefixInfo pi1, PrefixInfo pi2) {
@@ -140,8 +134,9 @@ public class Verify {
       Map<String, PrefixInfo> prefixes = new HashMap<>();
 
       for (Entry<Key,Value> entry : scanner) {
-        String[] val = entry.getValue().toString().split("-");
-        prefixes.computeIfAbsent(val[0], k -> new PrefixInfo()).add(Long.parseLong(val[1]));
+        String qual = entry.getKey().getColumnQualifierData().toString();
+        long val = Long.parseLong(entry.getValue().toString());
+        prefixes.computeIfAbsent(qual, k -> new PrefixInfo()).add(val);
       }
 
       return prefixes;

@@ -18,11 +18,11 @@ public class Generate {
   public static void main(String[] args) throws Exception {
 
     if(args.length != 5) {
-      System.err.println("Usage : Generate <prefix> <numTablets> <numFiles> <numEntries> <dir>");
+      System.err.println("Usage : Generate <qualifier> <numTablets> <numFiles> <numEntries> <dir>");
       System.exit(2);
     }
 
-    String prefix = args[0];
+    String qual = args[0];
     int numTablets = Integer.parseInt(args[1]);
     int numFiles = Integer.parseInt(args[2]);
     int numEntries = Integer.parseInt(args[3]);
@@ -58,7 +58,7 @@ public class Generate {
           writer.startDefaultLocalityGroup();
           int c = 0;
           for (String row : rows) {
-            writer.append(new Key(row,"f1","q1"), prefix+"-"+(fileNum*entriesPerFile+c));
+            writer.append(new Key(row,"f1",qual), ""+(fileNum*entriesPerFile+c));
             c++;
           }
 
