@@ -20,7 +20,7 @@ public class Import {
       long t2 = System.currentTimeMillis();
       System.out.println(t2 - t1);
     } else {
-      conn.tableOperations().addFilesTo("bulky").from(dir).load();
+      throw new IllegalArgumentException(args[0]);
     }
   }
 }

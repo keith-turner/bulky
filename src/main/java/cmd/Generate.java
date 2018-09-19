@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 import org.apache.accumulo.core.client.rfile.RFile;
 import org.apache.accumulo.core.client.rfile.RFileWriter;
 import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Value;
 
 public class Generate {
   public static void main(String[] args) throws Exception {
@@ -53,12 +54,12 @@ public class Generate {
         Collections.sort(rows);
 
         String name = String.format("%s/bf%06d.rf", dir,fileNum);
-        try(RFileWriter writer = RFile.newWriter().to(name).build()){
+        try(RFileWriter writer = RFile.newWriter().to(name).withTableProperties(Collections.singletonMap("table.file.replication", "1")).build()){
 
           writer.startDefaultLocalityGroup();
           int c = 0;
           for (String row : rows) {
-            writer.append(new Key(row,"f1",qual), ""+(fileNum*entriesPerFile+c));
+            writer.append(new Key(row,"f1",qual), new Value(""+(fileNum*entriesPerFile+c)));
             c++;
           }
 
