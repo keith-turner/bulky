@@ -38,7 +38,10 @@ public class Split {
     }
     ntc.withSplits(splits);
 
+    long t1 = System.currentTimeMillis();
     conn.tableOperations().create("bulky", ntc);
+    long t2 = System.currentTimeMillis();
+    System.out.println("Create time:"+(t2 - t1));
 
   }
 }
