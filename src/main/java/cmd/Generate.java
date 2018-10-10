@@ -5,6 +5,7 @@ import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,8 +53,11 @@ public class Generate {
 
         Collections.sort(rows);
 
-        String name = String.format("%s/bf%06d-%016x-%016x.rf", dir,fileNum, start, (increment - 1));
-        try(RFileWriter writer = RFile.newWriter().to(name).build()){
+        String name = String.format("%s/bf%06d-%016x-%016x.rf", dir,fileNum, start, start+(increment - 1));
+
+        Map<String,String> tableProps = Collections.singletonMap("table.file.replication", "1");
+
+        try(RFileWriter writer = RFile.newWriter().to(name).withTableProperties(tableProps).build()){
 
           writer.startDefaultLocalityGroup();
           int c = 0;
