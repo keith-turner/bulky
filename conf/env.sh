@@ -1,4 +1,4 @@
-ACCUMULO_VERSION="1.9.2"
+ACCUMULO_VERSION=$(accumulo version)
 HADOOP_VERSION=$(hadoop version | head -1 | cut -f 2 -d ' ')
 
 #TODO ZK version
