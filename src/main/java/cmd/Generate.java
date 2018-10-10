@@ -52,7 +52,7 @@ public class Generate {
 
         Collections.sort(rows);
 
-        String name = String.format("%s/bf%06d.rf", dir,fileNum);
+        String name = String.format("%s/bf%06d-%016x-%016x.rf", dir,fileNum, start, (increment - 1));
         try(RFileWriter writer = RFile.newWriter().to(name).build()){
 
           writer.startDefaultLocalityGroup();

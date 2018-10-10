@@ -4,6 +4,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.admin.NewTableConfiguration;
 import org.apache.hadoop.io.Text;
 
 import acbase.CmdUtil;
@@ -11,28 +12,33 @@ import acbase.CmdUtil;
 public class Split {
   public static void main(String[] args) throws Exception {
 
-    if(args.length != 1) {
-      System.err.println("Usage : Split <splits>");
+    if(args.length != 2) {
+      System.err.println("Usage : Split <splits> [online|offline]");
       System.exit(2);
     }
 
-    Connector conn = CmdUtil.getConnector();
-
-    conn.tableOperations().create("bulky");
-
     int numTablets = Integer.parseInt(args[0]);
 
-    SortedSet<Text> partitionKeys = new TreeSet<>();
+    SortedSet<Text> splits = new TreeSet<>();
 
     long increment = Long.MAX_VALUE / numTablets;
 
     for(int i = 1; i< numTablets; i++) {
       String split = String.format("%016x", i * increment);
-      partitionKeys.add(new Text(split));
+      splits.add(new Text(split));
     }
 
+    Connector conn = CmdUtil.getConnector();
 
-    conn.tableOperations().addSplits("bulky", partitionKeys);
+    NewTableConfiguration ntc = new NewTableConfiguration();
+    if(args[1].equals("offline")) {
+      ntc.createOffline();
+    } else if (!args[1].equals("online")) {
+      throw new IllegalArgumentException("Expected online or offline, not : "+args[1]);
+    }
+    ntc.withSplits(splits);
+
+    conn.tableOperations().create("bulky", ntc);
 
   }
 }
